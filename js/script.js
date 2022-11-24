@@ -78,6 +78,12 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
+const calcDisplayBalance = function(moviments) {
+  const balance = moviments.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = ` R$ ${balance}`;
+}
+calcDisplayBalance(account1.movements);
+
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
    acc.username = acc.owner
@@ -87,9 +93,8 @@ const createUsernames = function (accs) {
    .join('');
   })
 };
+createUsernames(accounts);
 
-console.log(createUsernames(accounts));
-console.log(accounts);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -109,5 +114,3 @@ const movementsDescriptions = movements.map((mov, i) =>
 );
 
 console.log(movementsDescriptions);
-
-/////////////////////////////////////////////////
