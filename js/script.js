@@ -83,11 +83,13 @@ const calcDisplayBalance = function(moviments) {
 }
 calcDisplayBalance(account1.movements);
 
-// Calcula entrada, saída e juros
+// Calcula entrada, saída e juros com valores acima de R$ 1,00
 const calcDisplaySummary = function (movements) {
   labelSumIn.textContent = `R$ ${movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0)}`;
+
   labelSumOut.textContent = `R$ ${Math.abs(movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0))}`;
-  labelSumInterest.textContent = `R$ ${movements.filter(mov => mov > 0).map(deposit => (deposit * .2) / 100).reduce((acc, int) => acc + int, 0)}`;
+
+  labelSumInterest.textContent = `R$ ${movements.filter(mov => mov > 0).map(deposit => (deposit * .2) / 100).filter((int, i, arr) => { return int >=1 }).reduce((acc, int) => acc + int, 0)}`;
 }
 calcDisplaySummary(account1.movements);
 
