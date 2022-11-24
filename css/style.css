@@ -208,7 +208,7 @@ nav {
 }
 
 .operation--transfer {
-  background-image: linear-gradient(to top left, #ffb003, #ffcb03);
+  background-image: linear-gradient(to top left, #03ff46, #03ddff);
 }
 
 .operation--loan {
@@ -216,7 +216,7 @@ nav {
 }
 
 .operation--close {
-  background-image: linear-gradient(to top left, #e52a5a, #ff585f);
+  background-image: linear-gradient(to top left, #e52a5a, #b3558d);
 }
 
 h2 {
