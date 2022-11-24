@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////
 // BANKIST APP
 
-// Data
+// Dados de usuários
 const account1 = {
   owner: 'Jonas Schmedtmann',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
@@ -61,12 +61,11 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+// Atualiza interface depositos e saques
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
-
   movements.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposito' : 'saque';
-
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
@@ -75,22 +74,24 @@ const displayMovements = function (movements) {
       containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-
 displayMovements(account1.movements);
 
+// Calcula saldo
 const calcDisplayBalance = function(moviments) {
   const balance = moviments.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = ` R$ ${balance}`;
 }
 calcDisplayBalance(account1.movements);
 
+// Calcula entrada, saída e juros
 const calcDisplaySummary = function (movements) {
-  const incomes = movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `R$ ${incomes}`;
+  labelSumIn.textContent = `R$ ${movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0)}`;
   labelSumOut.textContent = `R$ ${Math.abs(movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0))}`;
+  labelSumInterest.textContent = `R$ ${movements.filter(mov => mov > 0).map(deposit => (deposit * .2) / 100).reduce((acc, int) => acc + int, 0)}`;
 }
 calcDisplaySummary(account1.movements);
 
+// Cria contas de usuários
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
    acc.username = acc.owner.toLowerCase().split(' ').map(name => name[0]).join('');
