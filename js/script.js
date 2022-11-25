@@ -84,14 +84,30 @@ const calcDisplayBalance = function(moviments) {
 calcDisplayBalance(account1.movements);
 
 // Calcula entrada, saída e juros com valores acima de R$ 1,00
-const calcDisplaySummary = function (movements) {
-  labelSumIn.textContent = `R$ ${movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0)}`;
+// const calcDisplaySummary = function (movements) {
+//   labelSumIn.textContent = `R$ ${movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0)}`;
 
-  labelSumOut.textContent = `R$ ${Math.abs(movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0))}`;
+//   labelSumOut.textContent = `R$ ${Math.abs(movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0))}`;
 
-  labelSumInterest.textContent = `R$ ${movements.filter(mov => mov > 0).map(deposit => (deposit * .2) / 100).filter((int, i, arr) => { return int >=1 }).reduce((acc, int) => acc + int, 0)}`;
+//   labelSumInterest.textContent = `R$ ${movements.filter(mov => mov > 0).map(deposit => (deposit * .2) / 100).filter((int, i, arr) => { return int >=1 }).reduce((acc, int) => acc + int, 0)}`;
+// }
+// calcDisplaySummary(account1.movements);
+
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `R$ ${incomes}`;
+
+  const out = acc.movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `R$ ${Math.abs(out)}`;
+
+  const interest = acc.movements
+   .filter(mov => mov > 0)
+   .map(deposit => (deposit * acc.interestRate) / 100)
+   .filter((int, i, arr) => {
+     return int >=1 })
+     .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `R$ ${interest}`;
 }
-calcDisplaySummary(account1.movements);
 
 // Cria contas de usuários
 const createUsernames = function (accs) {
@@ -120,13 +136,23 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
-    // Atualiza interface
+   // Atualiza movimentos
     displayMovements(currentAccount.movements);
+    // Atualiza saldo
     calcDisplayBalance(currentAccount.movements);
-    calcDisplaySummary(currentAccount.movements);
+    // Atualiza entrada, saída e juros
+    calcDisplaySummary(currentAccount);
   }else {
     alert('Usuário ou senha inválidos!');
   }
+});
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(acc => acc.username === inputTransferTo.value);
+  console.log(amount, receiverAcc);
+
 });
 
 

@@ -149,7 +149,7 @@ nav {
 }
 
 .movements__type--deposito {
-  background-image: linear-gradient(to top left, #5b0ff2, #5d9ae1);
+  background-image: linear-gradient(to top left, #1651b8, #5d9ae1);
 }
 
 .movements__type--saque {
@@ -208,17 +208,18 @@ nav {
 }
 
 .operation--transfer {
-  background-image: linear-gradient(to top left, #03ff46, #03ddff);
+  background-image: linear-gradient(to top left, #03ff46,#16b83e);
 }
 
 .operation--loan {
-  background-image: linear-gradient(to top left, #5b0ff2, #5d9ae1);
+  background-image: linear-gradient(to top left, #1651b8, #5d9ae1);
 }
 
+
 .operation--close {
-  background-image: linear-gradient(to top left, #f2f20f, #dde15d);
+  background-image: linear-gradient(to top left, #f2f20f, #ffe11f);
 }
-/*#e52a5a, #b3558d*/
+
 h2 {
   margin-bottom: 1.5rem;
   font-size: 1.7rem;
