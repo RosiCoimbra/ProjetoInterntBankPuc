@@ -74,14 +74,11 @@ const displayMovements = function (movements) {
       containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-//displayMovements(account1.movements);
 
-// Calcula saldo
-const calcDisplayBalance = function(moviments) {
-  const balance = moviments.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = ` R$ ${balance}`;
-}
-//calcDisplayBalance(account1.movements);
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${acc.balance}€`;
+};
 
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0);
@@ -99,7 +96,7 @@ const calcDisplaySummary = function (acc) {
   labelSumInterest.textContent = `R$ ${interest}`;
 }
 
-// Cria contas de usuários
+// Cria contas de usuários - pegando a primeira letra de cada nome e sobrenome
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
    acc.username = acc.owner.toLowerCase().split(' ').map(name => name[0]).join('');
@@ -108,6 +105,18 @@ const createUsernames = function (accs) {
 createUsernames(accounts);
 
 // Atualiza interface
+const updateUI = function (acc) {
+  // Display movementos
+  displayMovements(acc.movements);
+
+  // Display saldo
+  calcDisplayBalance(acc);
+
+  // Display resumo
+  calcDisplaySummary(acc);
+};
+
+// Event handler - Manipulador de eventos
 let currentAccount;
 
 btnLogin.addEventListener('click', function (e) {
@@ -126,12 +135,8 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
-   // Atualiza movimentos
-    displayMovements(currentAccount.movements);
-    // Atualiza saldo
-    calcDisplayBalance(currentAccount.movements);
-    // Atualiza entrada, saída e juros
-    calcDisplaySummary(currentAccount);
+   // Atualiza interface
+   updateUI(currentAccount);
   }else {
     alert('Usuário ou senha inválidos!');
   }
@@ -140,9 +145,26 @@ btnLogin.addEventListener('click', function (e) {
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
   const amount = Number(inputTransferAmount.value);
-  const receiverAcc = accounts.find(acc => acc.username === inputTransferTo.value);
-  console.log(amount, receiverAcc);
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  inputTransferAmount.value = inputTransferTo.value = '';
 
+  if (
+    amount > 0 &&
+    receiverAcc &&
+    currentAccount.balance >= amount &&
+    receiverAcc?.username !== currentAccount.username
+  ) {
+    // Fazendo a transferência
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+
+    // Atualiza interface
+    updateUI(currentAccount);
+  } else {
+    alert('Erro ao transferir - Saldo insufieciente ou usuário inválido!'); 
+  }
 });
 
 /////////////////////////////////////////////////
