@@ -74,24 +74,14 @@ const displayMovements = function (movements) {
       containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovements(account1.movements);
+//displayMovements(account1.movements);
 
 // Calcula saldo
 const calcDisplayBalance = function(moviments) {
   const balance = moviments.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = ` R$ ${balance}`;
 }
-calcDisplayBalance(account1.movements);
-
-// Calcula entrada, saída e juros com valores acima de R$ 1,00
-// const calcDisplaySummary = function (movements) {
-//   labelSumIn.textContent = `R$ ${movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0)}`;
-
-//   labelSumOut.textContent = `R$ ${Math.abs(movements.filter(mov => mov < 0).reduce((acc, mov) => acc + mov, 0))}`;
-
-//   labelSumInterest.textContent = `R$ ${movements.filter(mov => mov > 0).map(deposit => (deposit * .2) / 100).filter((int, i, arr) => { return int >=1 }).reduce((acc, int) => acc + int, 0)}`;
-// }
-// calcDisplaySummary(account1.movements);
+//calcDisplayBalance(account1.movements);
 
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements.filter(mov => mov > 0).reduce((acc, mov) => acc + mov, 0);
@@ -154,9 +144,6 @@ btnTransfer.addEventListener('click', function (e) {
   console.log(amount, receiverAcc);
 
 });
-
-
-
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
