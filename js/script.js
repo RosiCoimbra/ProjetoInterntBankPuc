@@ -62,9 +62,12 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 // Atualiza interface depositos e saques
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
-  movements.forEach(function (mov, i) {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposito' : 'saque';
     const html = `
       <div class="movements__row">
@@ -122,9 +125,8 @@ let currentAccount;
 btnLogin.addEventListener('click', function (e) {
   // Previne comportamento padrão do formulário
   e.preventDefault();
-  //console.log('Login');
+
   currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
-  console.log(currentAccount);
 
   if(currentAccount?.pin === Number(inputLoginPin.value)) {
     // Exibe mensagem de boas vindas
@@ -165,6 +167,50 @@ btnTransfer.addEventListener('click', function (e) {
   } else {
     alert('Erro ao transferir - Saldo insufieciente ou usuário inválido!'); 
   }
+});
+
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    // Adiciona movimento
+    currentAccount.movements.push(amount);
+
+    // Atualiza interface
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = '';
+});
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  
+  if(inputCloseUsername.value === currentAccount.username && Number(inputClosePin.value) === currentAccount.pin)
+  {
+    const index = accounts.findIndex(acc => acc.username === currentAccount.username);
+
+    console.log(index);
+
+    // Deleta conta
+    accounts.splice(index, 1);
+
+    // Oculta interface
+    containerApp.style.opacity = 0;
+    console.log(accounts);
+
+  }else {
+    alert('Usuário ou senha inválidos!');
+  }
+  inputCloseUsername.value = inputClosePin.value = '';
+});
+
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
 
 /////////////////////////////////////////////////
