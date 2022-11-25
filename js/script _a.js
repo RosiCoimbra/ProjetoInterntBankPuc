@@ -10,18 +10,6 @@ const account1 = {
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
-
-  movementsDates: [
-    '2021-01-18T21:31:17.178Z',
-    '2021-02-23T07:42:02.383Z',
-    '2021-04-28T09:15:04.904Z',
-    '2021-05-01T10:17:24.185Z',
-    '2021-05-08T14:11:59.604Z',
-    '2021-05-27T17:01:17.194Z',
-    '2021-05-31T23:36:17.929Z',
-    '2021-06-01T10:51:36.790Z'],
-    currency: 'BRL',
-    locale: 'pt-PT', // pt-BR
 };
 
 const account2 = {
@@ -29,18 +17,6 @@ const account2 = {
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
-
-  movementsDates: [
-    '2021-01-01T13:15:33.035Z',
-    '2021-01-30T09:48:16.867Z',
-    '2021-04-25T06:04:23.907Z',
-    '2021-05-10T14:18:46.235Z',
-    '2021-05-15T16:33:06.386Z',
-    '2021-05-17T14:43:26.374Z',
-    '2021-05-18T18:49:59.371Z',
-    '2021-05-19T12:01:20.894Z'],
-    currency: 'USD',
-    locale: 'en-US',
 };
 
 const account3 = {
@@ -104,7 +80,7 @@ const displayMovements = function (movements, sort = false) {
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `R$ ${acc.balance}`;
+  labelBalance.textContent = `${acc.balance}€`;
 };
 
 const calcDisplaySummary = function (acc) {
@@ -152,7 +128,7 @@ btnLogin.addEventListener('click', function (e) {
 
   currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
 
-  if(currentAccount?.pin === +inputLoginPin.value) {
+  if(currentAccount?.pin === Number(inputLoginPin.value)) {
     // Exibe mensagem de boas vindas
     labelWelcome.textContent = `Bem vindo, ${currentAccount.owner.split(' ')[0]}`;
     containerApp.style.opacity = 100;
@@ -170,7 +146,7 @@ btnLogin.addEventListener('click', function (e) {
 
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
-  const amount = +(inputTransferAmount).value;
+  const amount = Number(inputTransferAmount.value);
   const receiverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
   );
@@ -196,7 +172,7 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const amount = +(inputLoanAmount.value);
+  const amount = Number(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Adiciona movimento
@@ -211,7 +187,7 @@ btnLoan.addEventListener('click', function (e) {
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
   
-  if(inputCloseUsername.value === currentAccount.username && +(inputClosePin.value) === currentAccount.pin)
+  if(inputCloseUsername.value === currentAccount.username && Number(inputClosePin.value) === currentAccount.pin)
   {
     const index = accounts.findIndex(acc => acc.username === currentAccount.username);
 
