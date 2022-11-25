@@ -124,6 +124,8 @@ btnLogin.addEventListener('click', function (e) {
     displayMovements(currentAccount.movements);
     calcDisplayBalance(currentAccount.movements);
     calcDisplaySummary(currentAccount.movements);
+  }else {
+    alert('Usuário ou senha inválidos!');
   }
 });
 
