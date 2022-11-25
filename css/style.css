@@ -88,7 +88,7 @@ nav {
   gap: 2rem;
 
   /* NOTE This creates the fade in/out anumation */
-  /* opacity: 0; */
+  opacity: 0;
   transition: all 1s;
 }
 
@@ -216,9 +216,9 @@ nav {
 }
 
 .operation--close {
-  background-image: linear-gradient(to top left, #e52a5a, #b3558d);
+  background-image: linear-gradient(to top left, #f2f20f, #dde15d);
 }
-
+/*#e52a5a, #b3558d*/
 h2 {
   margin-bottom: 1.5rem;
   font-size: 1.7rem;
