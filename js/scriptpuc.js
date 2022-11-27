@@ -88,7 +88,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 // Funções
 const formatMovementDate = function (date, locale) {
   const calcDaysPassed = (date1, date2) => Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
-  console.log(new Date, date);
+  
   const daysPassed = calcDaysPassed(new Date(), date);
 
   if (daysPassed === 0) return 'Hoje';
@@ -100,7 +100,6 @@ const formatMovementDate = function (date, locale) {
   // const year = date.getFullYear();
   // return `${day}/${month}/${year}`;
   return new Intl.DateTimeFormat(locale).format(date);
-
 };
 
 // Atualiza interface depositos e saques
@@ -114,6 +113,18 @@ const displayMovements = function (acc, sort = false) {
 
     const date = new Date(acc.movementsDates[i]);
     const displayDate = formatMovementDate(date, acc.locale);
+
+    // const formattedMov = new Intl.NumberFormat(acc.locale, {
+    //   style: 'currency',
+    //   currency: acc.currency,
+    // }).format(mov);
+
+    // const html = `
+    //   <div class="movements__row">
+    //     <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
+    //     <div class="movements__date">${displayDate}</div>
+    //     <div class="movements__value">${formattedMov}</div>
+    //   </div>`;
 
     const html = `
       <div class="movements__row">
@@ -258,14 +269,16 @@ btnLoan.addEventListener('click', function (e) {
   const amount = +(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // Adiciona movimento
-    currentAccount.movements.push(amount);
+    setTimeout (function () {
+      // Adiciona movimento
+      currentAccount.movements.push(amount);
 
-    // Adicionando data do empréstimo
-    currentAccount.movementsDates.push(new Date().toISOString());
+      // Adicionando data do empréstimo
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Atualiza interface
-    updateUI(currentAccount);
+      // Atualiza interface
+      updateUI(currentAccount)
+    }, 2500);
   }
   inputLoanAmount.value = '';
 });
@@ -317,4 +330,5 @@ const movementsDescriptions = movements.map((mov, i) =>
   `Moviment ${i + 1}: Você ${mov > 0 ? 'depositou' : 'sacou'} ${Math.abs(mov)}`
 );
 
-//console.log(movementsDescriptions);
+// const num = 3884764;
+// console.log(new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(num));
