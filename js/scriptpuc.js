@@ -92,8 +92,8 @@ const formatMovementDate = function (date, locale) {
   const daysPassed = calcDaysPassed(new Date(), date);
 
   if (daysPassed === 0) return 'Hoje';
-  if (daysPassed === 1) return 'Ontem';
-  if (daysPassed <= 7) return `${daysPassed} dias atrás`;
+  // if (daysPassed === 1) return 'Ontem';
+  // if (daysPassed <= 7) return `${daysPassed} dias atrás`;
 
   // const day = `${date.getDate()}`.padStart(2, 0);
   // const month = `${date.getMonth() + 1}`.padStart(2, 0);
@@ -179,13 +179,40 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+const startLogOutTimer = function () {
+  const tick = function () {
+    const min= String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    // In each call, print the remaining time to UI
+
+    labelTimer.textContent = `${min}:${sec}`;
+
+    // When 0 seconds, stop timer and log out user
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = 'Entre com sua conta';
+      containerApp.style.opacity = 0;
+    }
+
+    // Decrease 1s
+    time--;
+  };
+  // Set time to 5 minutes
+  let time = 120;
+
+  // Call the timer every second
+  tick();
+  const timer = setInterval(tick, 1000);
+  return timer;
+};
+
 // Event handler - Manipulador de eventos
-let currentAccount;
+let currentAccount, timer;
 
 // Fake always logged in - Simula login
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 btnLogin.addEventListener('click', function (e) {
   // Previne comportamento padrão do formulário
@@ -208,8 +235,9 @@ btnLogin.addEventListener('click', function (e) {
       year: 'numeric',
       //weekday: 'long',
     };
+
     //const locale = navigator.language;
-    labelDate.textContent = new Intl.DateTimeFormat(currentAccount.locale, options).format(now);
+  labelDate.textContent = new Intl.DateTimeFormat(currentAccount.locale, options).format(now);
 
     // Cria data e hora atual - Por código
     // const now = new Date();
@@ -223,6 +251,10 @@ btnLogin.addEventListener('click', function (e) {
     // Limpa campos de login
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
+
+    // Timer
+    if (timer) clearInterval(timer);
+    timer = startLogOutTimer();
 
    // Atualiza interface
    updateUI(currentAccount);
@@ -257,6 +289,10 @@ btnTransfer.addEventListener('click', function (e) {
 
     // Atualiza interface
     updateUI(currentAccount);
+
+    // Reset timer
+    clearInterval(timer);
+    timer = startLogOutTimer();
   } else {
     alert('Erro ao transferir - Saldo insufieciente ou usuário inválido!'); 
   }
@@ -278,6 +314,10 @@ btnLoan.addEventListener('click', function (e) {
 
       // Atualiza interface
       updateUI(currentAccount)
+
+      // Reset timer
+    clearInterval(timer);
+    timer = startLogOutTimer();
     }, 2500);
   }
   inputLoanAmount.value = '';
@@ -315,6 +355,8 @@ btnSort.addEventListener('click', function (e) {
   sorted = !sorted;
 });
 
+//displayMovements = function (acc, sort = false)
+
 // LECTURES
 
 const currencies = new Map([
@@ -329,6 +371,3 @@ const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 const movementsDescriptions = movements.map((mov, i) => 
   `Moviment ${i + 1}: Você ${mov > 0 ? 'depositou' : 'sacou'} ${Math.abs(mov)}`
 );
-
-// const num = 3884764;
-// console.log(new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(num));
