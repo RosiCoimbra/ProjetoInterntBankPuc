@@ -1,8 +1,7 @@
 # Banco Digital PUC
 
-Este aplicativo desenvolvido usando HTML, CSS e JavaScript permite que você deposite e solicite dinheiro entre contas pré-existentes.
+Este aplicativo desenvolvido usando HTML, CSS e JavaScript permite fazer o login em contas pré-existentes, faça depositos e solicite empréstimo, atualizando o extrato simultâneamente. Possui um relógio controlar o tempo de acesso.
 O aplicativo usa conceitos de JavaScript, como manipulação de DOM, funções, matrizes e métodos de matriz.
-
 
 Abaixo estão as contas pré-definidas que podem ser usadas para fazer login no aplicativo.
 
