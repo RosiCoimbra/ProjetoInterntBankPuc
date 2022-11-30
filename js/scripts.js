@@ -80,10 +80,10 @@ const formatMovementDate = function (date, locale) {
 };
 
 // Atualiza interface depositos e saques
-const displayMovements = function (acc, sort = false) {
+const displayMovements = function (acc) {
   containerMovements.innerHTML = '';
 
-  const movs = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
+  const movs = acc.movements;
 
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposito' : 'saque';
@@ -222,12 +222,12 @@ btnTransfer.addEventListener('click', function (e) {
   );
   inputTransferAmount.value = inputTransferTo.value = '';
 
-  if (
+  if(
     amount > 0 &&
     receiverAcc &&
     currentAccount.balance >= amount &&
     receiverAcc?.username !== currentAccount.username
-  ) {
+  ){
     // Fazendo a transferência
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
